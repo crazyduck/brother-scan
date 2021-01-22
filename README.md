@@ -48,6 +48,8 @@ docker run --rm \
   brscan
 ```
 
+To see the output from `brscand` use `docker run -t ...`
+
 ## Running on host OS
 
 If you for some reason want to run it directly on your Linux host OS, that
