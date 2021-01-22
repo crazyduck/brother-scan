@@ -2,6 +2,7 @@ from pysnmp.entity.rfc3413.oneliner import cmdgen
 from pysnmp.proto import rfc1902
 import time
 
+
 def add_menu_entry(button, func, user, host, appnum,
                    duration=360, brid=''):
     global cmdGen, authData, transportTarget
@@ -22,6 +23,7 @@ def add_menu_entry(button, func, user, host, appnum,
                 errorStatus.prettyPrint(),
                 errorIndex and varBinds[int(errorIndex)-1] or '?'))
 
+
 def launch(args, config):
     global cmdGen, authData, transportTarget
     cmdGen = cmdgen.CommandGenerator()
@@ -38,6 +40,6 @@ def launch(args, config):
         for func, users in config['menu'].items():
             for user, entry in users.items():
                 add_menu_entry('SCAN', func.upper(), user,
-                               '%s:%d'%(addr), appnum)
+                               '%s:%d' % (addr), appnum)
                 appnum += 1
         time.sleep(60)

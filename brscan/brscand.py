@@ -58,15 +58,16 @@ def main():
         print('Error: %s: %s' % (e.strerror, e.filename))
         sys.exit(1)
 
-    # Start Snmp
+    print("Starting listener thread")
     listenThread = threading.Thread(target=listen.launch, args=(args, config))
     listenThread.start()
     time.sleep(1)
 
-    # Start Snmp
+    print("Starting SNMP thread")
     snmpThread = threading.Thread(target=snmp.launch, args=(args, config))
     snmpThread.start()
 
+    print("Waiting for threads to join")
     # Wait for closing
     snmpThread.join()
     listenThread.join()
