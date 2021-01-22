@@ -50,6 +50,25 @@ docker run --rm \
 
 To see the output from `brscand` use `docker run -t ...`
 
+### Postprocessing
+
+`brscand` can run a postprocessing command on the final PDF.
+To use the feature:
+ * Mount the script into the docker container, e.g. by adding `-v $(pwd)/postprocessing:/postprocessing` to the docker command line
+ * Add a `postprocess` entry in `brother-scan.yaml`
+
+#### Example
+ ```
+ menu:
+  file:
+    Standard:
+      dir: /output/scan1
+      resolution: 200
+      width: 210
+      height: 297
+      postprocess: /postprocess/upload_nextcloud.sh
+```
+
 ## Running on host OS
 
 If you for some reason want to run it directly on your Linux host OS, that

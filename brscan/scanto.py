@@ -48,6 +48,8 @@ def scanto(func, options):
     now = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
     adf = options.pop('adf', False)
 
+    output_pdf = os.path.join(dst, f"scan_{now}.pdf")
+
     if adf:
         cmd = ['scanadf',
                '--output-file', os.path.join(dst, 'scan_%s_%%d.pnm' % (now))]
@@ -61,7 +63,7 @@ def scanto(func, options):
             pnmtopdf(pnmfile, pdffile, options['resolution'])
             pnmfiles.append(pnmfile)
             pdffiles.append(pdffile)
-        cmd = ['pdfunite'] + pdffiles + [os.path.join(dst, 'scan_%s.pdf' % (now))]
+        cmd = ['pdfunite'] + pdffiles + [output_pdf]
         print('# ' + ' '.join(cmd))
         subprocess.call(cmd)
         for f in pdffiles:
@@ -76,7 +78,16 @@ def scanto(func, options):
             start = time()
             process = subprocess.run(cmd, stdout=pnm, stdin=subprocess.DEVNULL)
             runtime = int(time() - start)
-            print(f"Subprocess finished with code: {process.returncode} after {runtime} seconds")
-        pdffile = '%s.pdf' % (pnmfile[:-4])
-        pnmtopdf(pnmfile, pdffile, options['resolution'])
-        print('Wrote', pdffile)
+            print(f"scanimage subprocess finished with code: {process.returncode} after {runtime} seconds")
+        pnmtopdf(pnmfile, output_pdf, options['resolution'])
+        print('Wrote', output_pdf)
+
+    if 'postprocess' in options:
+        print("Calling postprocess script on output")
+        cmd = [options['postprocess'], output_pdf]
+        print('# ' + ' '.join(cmd))
+        print("Running subprocess")
+        start = time()
+        process = subprocess.run(cmd)
+        runtime = int(time() - start)
+        print(f"Postprocess subprocess finished with code: {process.returncode} after {runtime} seconds")
