@@ -10,6 +10,8 @@ provided here.
 
 ### Requirements
 
+* Python3 installed.
+  * Python3 Setuptools installed
 * Docker installed.
 * The latest proprietary brscan4 deb from Brother
   * I had to go through their 'Downloads' page for my device (https://support.brother.com/g/b/productsearch.aspx?c=us&lang=en&content=dl)
