@@ -1,21 +1,28 @@
+"""
+Submodule of brscand
+handles the listen process which will be called from scanner
+"""
 import socket
-import subprocess
+# import subprocess
 
 from .scanto import scanto
 
+
 def launch(args, config):
+    """ Endless listen function """
     addr = (args.bind_addr, args.bind_port)
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     server_socket.bind(addr)
-    print("Listening on %s:%d"%(addr))
+    print(f'Listening on {addr[0]}:{addr[1]}')
 
-    while(1):
+    while 1:
         data, addr = server_socket.recvfrom(2048)
-        print("Got UDP packet: %d bytes from %s:%s"%(
-            len(data), addr[0], addr[1]))
+        print(f'Got UDP packet: {len(data)} bytes from {addr[0]}:{addr[1]}')
+
         if len(data) < 4 or data[0] != 2 or data[1] != 0 or data[3] != 0x30:
-            print('Error: dropping unknown UDP data: %d bytes'%(len(data)))
+            print(f'Error: dropping unknown UDP data: {len(data)} bytes')
             continue
+
         msg = data[4:].decode('utf-8')
         print('Received:', msg)
         msgd = {}

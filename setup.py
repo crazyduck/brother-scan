@@ -1,11 +1,12 @@
+""" Create a python module from folder brscan """
 import setuptools
 
-with open('README.md', 'r') as fh:
+with open('README.md', 'r', encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name='brscan',
-    version='0.0.1',
+    version='0.1.0',
     author='Esben Haabendal',
     author_email='esben@haabendal.dk',
     description='Service for (some) network scanners from Brother Inc.',

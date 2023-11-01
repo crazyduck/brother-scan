@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
-
+"""
 # (C) 2013 Francois Cauwe
 # (C) 2015-2018 Esben Haabendal
+# (C) 2023 Maximilian Krause
+"""
+
 
 # Global libs
 import sys
@@ -19,6 +22,7 @@ from . import snmp
 
 
 def main():
+    """ Main class of module which is callable """
     parser = argparse.ArgumentParser(
         description='Brother network scanner server')
     parser.add_argument('bind_addr', metavar='BIND_ADDR',
@@ -52,24 +56,24 @@ def main():
 
     # Loading global configuration
     try:
-        with open(args.config) as configfile:
+        with open(args.config, encoding='utf-8') as configfile:
             config = yaml.load(configfile, Loader=CLoader)
     except FileNotFoundError as e:
-        print('Error: %s: %s' % (e.strerror, e.filename))
+        print(f'Error: {e.strerror}: {e.filename}')
         sys.exit(1)
 
-    # Start Snmp
-    listenThread = threading.Thread(target=listen.launch, args=(args, config))
-    listenThread.start()
+    # Start listen Thread
+    listen_thread = threading.Thread(target=listen.launch, args=(args, config))
+    listen_thread.start()
     time.sleep(1)
 
     # Start Snmp
-    snmpThread = threading.Thread(target=snmp.launch, args=(args, config))
-    snmpThread.start()
+    snmp_thread = threading.Thread(target=snmp.launch, args=(args, config))
+    snmp_thread.start()
 
     # Wait for closing
-    snmpThread.join()
-    listenThread.join()
+    snmp_thread.join()
+    listen_thread.join()
 
 
 if __name__ == '__main__':
