@@ -12,13 +12,13 @@ from pysnmp.proto import rfc1902
 def add_menu_entry(args):
     """ Announce each menuitem to scanner """
     cmd = ('TYPE=BR;' +
-           f'BUTTON={args['button']};' +
-           f'USER="{args['user']}";' +
-           f'FUNC={args['func']};' +
-           f'HOST={args['host']};' +
-           f'APPNUM={args['appnum']};' +
-           f'DURATION={args['duration']};' +
-           f'BRID={args['brid']};')
+           f'BUTTON={args["button"]};' +
+           f'USER="{args["user"]}";' +
+           f'FUNC={args["func"]};' +
+           f'HOST={args["host"]};' +
+           f'APPNUM={args["appnum"]};' +
+           f'DURATION={args["duration"]};' +
+           f'BRID={args["brid"]};')
 
     # print('Registering:', cmd)
     err_indication, err_status, err_index, var_binds = args['cmd_gen'].setCmd(
