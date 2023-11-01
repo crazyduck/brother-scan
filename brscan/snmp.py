@@ -33,7 +33,7 @@ def add_menu_entry(args):
     else:
         if err_status:
             print(f'{err_status.prettyPrint()} at ' +
-                  f'{err_index and var_binds[int(err_index)-1] or '?'}')
+                  f'{err_index and var_binds[int(err_index)-1] or "?"}')
 
 
 def launch(args, config):

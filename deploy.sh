@@ -1,7 +1,15 @@
 #!/bin/sh
 
-docker remove BrotherScanKey
+# Erase Container, if available
+docker remove /BrotherScanKey
 
+# create package
+python3 setup.py build sdist
+
+# Build Docker image
+docker build -t brscan --build-arg BRSCAN_DEB="brscan4-0.4.10-1.amd64.deb" .
+
+# Create Container
 docker run -d \
   -v $HOME/brscan/output:/output \
   -v $HOME/brscan/consume:/consume \
@@ -14,5 +22,3 @@ docker run -d \
   --name BrotherScanKey \
   brscan
 
-python3 setup.py build sdist
-docker build -t brscan --build-arg BRSCAN_DEB="brscan4-0.4.10-1.amd64.deb" .
