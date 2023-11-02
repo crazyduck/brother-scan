@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Erase Container, if available
-docker remove /BrotherScanKey
+docker remove --force /BrotherScanKey
 
 # create package
 python3 setup.py build sdist

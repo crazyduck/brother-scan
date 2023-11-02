@@ -1,4 +1,4 @@
-FROM python:3.12
+FROM python:3.11
 ARG BRSCAN_DEB=brscan4-0.4.10-1.amd64.deb
 #deprecated MAINTAINER esben@haabendal.dk
 
