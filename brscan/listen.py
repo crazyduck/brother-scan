@@ -3,9 +3,13 @@ Submodule of brscand
 handles the listen process which will be called from scanner
 """
 import socket
+import functools
 # import subprocess
 
 from .scanto import scanto
+
+# activate flush option in print cmd to see it in docker logs
+myprint = functools.partial(print, flush=True)
 
 
 def launch(args, config):
@@ -13,18 +17,18 @@ def launch(args, config):
     addr = (args.bind_addr, args.bind_port)
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     server_socket.bind(addr)
-    print(f'Listening on {addr[0]}:{addr[1]}')
+    myprint(f'Listening on {addr[0]}:{addr[1]}')
 
     while 1:
         data, addr = server_socket.recvfrom(2048)
-        print(f'Got UDP packet: {len(data)} bytes from {addr[0]}:{addr[1]}')
+        myprint(f'Got UDP packet: {len(data)} bytes from {addr[0]}:{addr[1]}')
 
         if len(data) < 4 or data[0] != 2 or data[1] != 0 or data[3] != 0x30:
-            print(f'Error: dropping unknown UDP data: {len(data)} bytes')
+            myprint(f'Error: dropping unknown UDP data: {len(data)} bytes')
             continue
 
         msg = data[4:].decode('utf-8')
-        print('Received:', msg)
+        myprint('Received:', msg)
         msgd = {}
         for item in msg.split(';'):
             if not item:

@@ -1,14 +1,16 @@
+"""
+ interpreter module if a scan is triggered
+"""
 import subprocess
 import os
 import datetime
-import wand.image
 import glob
+import functools
+import wand.image
 
-def pnmtopdf(pnmfile, pdffile, resolution=None):
-    with wand.image.Image(filename=pnmfile, resolution=resolution) as pnm:
-        with pnm.convert('pdf') as pdf:
-            pdf.save(filename=pdffile)
-    os.remove(pnmfile)
+# activate flush option in print cmd to see it in docker logs
+myprint = functools.partial(print, flush=True)
+
 
 scan_options = {
     'device': '--device-name',
@@ -23,14 +25,23 @@ scan_options = {
     'top': '-t',
 }
 
+
+def pnmtopdf(pnmfile, pdffile, resolution=None):
+    with wand.image.Image(filename=pnmfile, resolution=resolution) as pnm:
+        with pnm.convert('pdf') as pdf:
+            pdf.save(filename=pdffile)
+    os.remove(pnmfile)
+
+
 def add_scan_options(cmd, options):
     for name, arg in scan_options.items():
         if name in options:
             cmd += [arg, str(options[name])]
     cmd = [ str(c) for c in cmd ]
 
+
 def scanto(func, options):
-    print('scanto %s %s'%(func, options))
+    myprint('scanto %s %s'%(func, options))
     options = options.copy()
     if func == 'FILE':
         if not 'dir' in options:
@@ -45,7 +56,7 @@ def scanto(func, options):
         cmd = ['scanadf',
                '--output-file', os.path.join(dst, 'scan_%s_%%d.pnm'%(now))]
         add_scan_options(cmd, options)
-        print('# ' + ' '.join(cmd))
+        myprint('# ' + ' '.join(cmd))
         subprocess.call(cmd)
         pnmfiles = []
         pdffiles = []
@@ -55,7 +66,7 @@ def scanto(func, options):
             pnmfiles.append(pnmfile)
             pdffiles.append(pdffile)
         cmd = ['pdfunite'] + pdffiles + [os.path.join(dst, 'scan_%s.pdf'%(now))]
-        print('# ' + ' '.join(cmd))
+        myprint('# ' + ' '.join(cmd))
         subprocess.call(cmd)
         for f in pdffiles:
             os.remove(f)
@@ -64,9 +75,9 @@ def scanto(func, options):
         add_scan_options(cmd, options)
         pnmfile = os.path.join(dst, 'scan_%s.pnm'%(now))
         with open(pnmfile, 'w') as pnm:
-            print('# ' + ' '.join(cmd))
+            myprint('# ' + ' '.join(cmd))
             process = subprocess.Popen(cmd, stdout=pnm)
             process.wait()
         pdffile = '%s.pdf'%(pnmfile[:-4])
         pnmtopdf(pnmfile, pdffile, options['resolution'])
-        print('Wrote', pdffile)
+        myprint('Wrote', pdffile)

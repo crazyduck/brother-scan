@@ -5,8 +5,12 @@
 """
 
 import time
+import functools
 from pysnmp.entity.rfc3413.oneliner import cmdgen
 from pysnmp.proto import rfc1902
+
+# activate flush option in print cmd to see it in docker logs
+myprint = functools.partial(print, flush=True)
 
 
 def add_menu_entry(args):
@@ -20,7 +24,7 @@ def add_menu_entry(args):
            f'DURATION={args["duration"]};' +
            f'BRID={args["brid"]};')
 
-    # print('Registering:', cmd)
+    # myprint('Registering:', cmd)
     err_indication, err_status, err_index, var_binds = args['cmd_gen'].setCmd(
         args['authdata'], args['transport_target'],
         ('1.3.6.1.4.1.2435.2.3.9.2.11.1.1.0', rfc1902.OctetString(cmd))
@@ -29,11 +33,11 @@ def add_menu_entry(args):
 
     # Check for errors and print out results
     if err_indication:
-        print(err_indication)
+        myprint(err_indication)
     else:
         if err_status:
-            print(f'{err_status.prettyPrint()} at ' +
-                  f'{err_index and var_binds[int(err_index)-1] or "?"}')
+            myprint(f'{err_status.myprettyPrint()} at ' +
+                    f'{err_index and var_binds[int(err_index)-1] or "?"}')
 
 
 def launch(args, config):
@@ -48,13 +52,13 @@ def launch(args, config):
 
     adv_addr = (args.advertise_addr, args.advertise_port)
 
-    print(f'Advertising {adv_addr[0]}:{adv_addr[1]} to {args.scanner_addr}')
+    myprint(f'Advertising {adv_addr[0]}:{adv_addr[1]} to {args.scanner_addr}')
     for func, users in config['menu'].items():
         for user, entry in users.items():
-            print('Entry:', func.upper(), user, entry)
+            myprint('Entry:', func.upper(), user, entry)
     while 1:
         # Repeat advertising step each 60 seconds
-        print('Advertising to scanner')
+        myprint('Advertising to scanner')
         appnum = 1
         for func, users in config['menu'].items():
             for user, entry in users.items():

@@ -22,7 +22,7 @@ from . import listen
 from . import snmp
 
 # activate flush option in print cmd to see it in docker logs
-print = functools.partial(print, flush=True)
+myprint = functools.partial(print, flush=True)
 
 
 def main():
@@ -62,9 +62,9 @@ def main():
     try:
         with open(args.config, encoding='utf-8') as configfile:
             config = yaml.load(configfile, Loader=CLoader)
-            print(f'Config loaded: {args.config}')
+            myprint(f'Config loaded: {args.config}')
     except FileNotFoundError as e:
-        print(f'Error: {e.strerror}: {e.filename}')
+        myprint(f'Error: {e.strerror}: {e.filename}')
         sys.exit(1)
 
     # Start listen Thread
