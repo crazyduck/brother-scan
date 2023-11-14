@@ -1,4 +1,4 @@
-FROM python:3.11
+FROM python:3.12
 ARG BRSCAN_DEB=brscan4-0.4.10-1.amd64.deb
 #deprecated MAINTAINER esben@haabendal.dk
 
@@ -18,6 +18,11 @@ RUN apt-get update -q \
 # Install required python modules
 COPY requirements.txt /tmp/
 RUN pip install -r /tmp/requirements.txt
+
+# RUN pip uninstall pysnmp
+# RUN pip uninstall pysnmp-pyasn1
+# RUN pip uninstall pysnmp-pysmi
+RUN pip install git+https://github.com/pysnmp/pysnmp.git#egg=pysnmp
 
 # Install Brother scanner driver
 COPY $BRSCAN_DEB /tmp/
