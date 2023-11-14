@@ -40,7 +40,7 @@ def add_menu_entry(args):
                     f'{err_index and var_binds[int(err_index)-1] or "?"}')
 
 
-def launch(args, config):
+def launch_advertiser(args, config):
     """ main function of submodule snmp, called by brscand """
 
     menuargs = {}
@@ -48,14 +48,17 @@ def launch(args, config):
     menuargs['authdata'] = cmdgen.CommunityData('internal', mpModel=0)
     # SNMP Port 161
     menuargs['transport_target'] = cmdgen.UdpTransportTarget(
-                                    (args.scanner_addr, 161))
+        (args.scanner_addr, 161))
 
+    # Get IP and port to advertise
     adv_addr = (args.advertise_addr, args.advertise_port)
 
     myprint(f'Advertising {adv_addr[0]}:{adv_addr[1]} to {args.scanner_addr}')
+
     for func, users in config['menu'].items():
         for user, entry in users.items():
             myprint('Entry:', func.upper(), user, entry)
+
     while 1:
         # Repeat advertising step each 60 seconds
         myprint('Advertising to scanner')

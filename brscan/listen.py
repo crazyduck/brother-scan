@@ -12,7 +12,7 @@ from .scanto import scanto
 myprint = functools.partial(print, flush=True)
 
 
-def launch(args, config):
+def launch_listener(args, config):
     """ Endless listen function """
     addr = (args.bind_addr, args.bind_port)
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

@@ -13,6 +13,7 @@ import threading
 import argparse
 import socket
 import functools
+import logging
 import yaml
 
 from yaml import CLoader
@@ -21,8 +22,12 @@ from yaml import CLoader
 from . import listen
 from . import snmp
 
-# activate flush option in print cmd to see it in docker logs
+# activate flush option in print cmd to see it in docker logs in realtime
 myprint = functools.partial(print, flush=True)
+
+# configure logging
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(message)s', level=logging.DEBUG)
 
 
 def main():
@@ -62,18 +67,20 @@ def main():
     try:
         with open(args.config, encoding='utf-8') as configfile:
             config = yaml.load(configfile, Loader=CLoader)
-            myprint(f'Config loaded: {args.config}')
+            logging.info('Config loaded: %s', args.config)
     except FileNotFoundError as e:
-        myprint(f'Error: {e.strerror}: {e.filename}')
+        logging.error('Error: %s: %s', e.strerror, e.filename)
         sys.exit(1)
 
     # Start listen Thread
-    listen_thread = threading.Thread(target=listen.launch, args=(args, config))
+    listen_thread = threading.Thread(
+        target=listen.launch_listener, args=(args, config))
     listen_thread.start()
     time.sleep(1)
 
-    # Start Snmp
-    snmp_thread = threading.Thread(target=snmp.launch, args=(args, config))
+    # Start Advertiser (uses Snmp)
+    snmp_thread = threading.Thread(
+        target=snmp.launch_advertiser, args=(args, config))
     snmp_thread.start()
 
     # Wait for closing

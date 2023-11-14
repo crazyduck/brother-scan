@@ -23,3 +23,6 @@ menu:
       width: 210
       height: 297
       adf: true
+
+# Send by original brother script:
+# [pid  5947] sendto(10, "0\202\2\10\2\1\0\4\10internal\243\202\1\367\2\2\0\311\2\1\0\2\1\0000\202\1\3510y\6\17+\6\1\4\1\223\3\2\3\t\2\v\1\1\0\4fTYPE=BR;BUTTON=SCAN;USER=\"maxi-admin\";FUNC=IMAGE;HOST=192.168.10.11:54925;APPNUM=1;DURATION=360;BRID=;0w\6\17+\6\1\4\1\223\3\2\3\t\2\v\1\1\0\4dTYPE=BR;BUTTON=SCAN;USER=\"maxi-admin\";FUNC=OCR;HOST=192.168.10.11:54925;APPNUM=3;DURATION=360;BRID=;0y\6\17+\6\1\4\1\223\3\2\3\t\2\v\1\1\0\4fTYPE=BR;BUTTON=SCAN;USER=\"maxi-admin\";FUNC=EMAIL;HOST=192.168.10.11:54925;APPNUM=2;DURATION=360;BRID=;0x\6\17+\6\1\4\1\223\3\2\3\t\2\v\1\1\0\4eTYPE=BR;BUTTON=SCAN;USER=\"maxi-admin\";FUNC=FILE;HOST=192.168.10.11:54925;APPNUM=5;DURATION=360;BRID=;", 524, 0, {sa_family=AF_INET, sin_port=htons(161), sin_addr=inet_addr("192.168.10.20")}, 16 <unfinished ...>
