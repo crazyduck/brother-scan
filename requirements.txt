@@ -1,8 +1,8 @@
 ply==3.11
-pyasn1==0.5.0
+# pyasn1==0.5.0
 pycryptodomex==3.19.0
-pysmi==0.3.4
-pysnmp==4.4.12
+# pysmi==0.3.4
+# pysnmp==4.4.12
 PyYAML==6.0.1
 Wand==0.6.11
 # XmlDict==0.4.1
