@@ -24,7 +24,7 @@ def add_menu_entry(args):
            f'DURATION={args["duration"]};' +
            f'BRID={args["brid"]};')
 
-    # myprint('Registering:', cmd)
+    myprint('Registering:', cmd)
     err_indication, err_status, err_index, var_binds = args['cmd_gen'].setCmd(
         args['authdata'], args['transport_target'],
         ('1.3.6.1.4.1.2435.2.3.9.2.11.1.1.0', rfc1902.OctetString(cmd))
